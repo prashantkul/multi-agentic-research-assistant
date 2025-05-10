@@ -1,0 +1,110 @@
+tasks:
+  - id: literature_review
+    description: >
+      Conduct a comprehensive literature review on Generative AI applications in 
+      healthcare. Identify key research trends, notable successes, limitations, 
+      and gaps in the current literature. Focus on:
+      1. Recent advances in generative AI models for healthcare
+      2. Current applications in clinical settings
+      3. Ethical considerations and challenges
+      4. Data privacy and security concerns
+      5. Gaps and opportunities for novel research
+      
+      Your output should be a structured summary with references to key papers.
+    agent: researcher
+    expected_output: A comprehensive literature review document with identified research gaps
+
+  - id: domain_validation
+    description: >
+      Review the identified research gaps and opportunities in the healthcare domain.
+      Provide your expert opinion on:
+      1. Clinical relevance and potential impact
+      2. Practical implementation challenges
+      3. Regulatory and ethical considerations
+      4. Data availability and quality issues
+      5. Integration with existing healthcare systems
+      
+      Your output should be a validation report highlighting the most promising
+      research directions from a healthcare perspective.
+    agent: domain_expert
+    expected_output: A validation report on proposed research directions
+    context_required: true
+
+  - id: proposal_drafting
+    description: >
+      Draft a comprehensive research proposal for a novel application of
+      Generative AI in healthcare based on the identified gaps and validated
+      research directions.
+
+      The proposal should be structured as a 2-3 page academic research proposal with the following sections:
+
+      1. Title (Concise and descriptive of the research focus)
+      2. Abstract (150-250 words summarizing the proposal)
+      3. Background & Literature Review (Concise summary of key related work)
+      4. Problem Statement & Research Gap (Clear articulation of the gap being addressed)
+      5. Proposed Gen AI Approach (Methodology and technical details)
+      6. Expected Impact in Healthcare (Potential benefits and applications)
+      7. Limitations or Ethical Considerations (Potential challenges and ethical issues)
+      8. References (Key citations in academic format)
+
+      Ensure the proposal is academically sound, novel, and addresses a significant
+      healthcare challenge. Format the proposal in Markdown for readability.
+    agent: proposal_writer
+    expected_output: A complete draft research proposal in the required format
+    context_required: true
+
+  - id: proposal_critique
+    description: >
+      Thoroughly critique the draft research proposal, focusing on:
+      1. Scientific merit and novelty
+      2. Methodological soundness
+      3. Feasibility and practical implementation
+      4. Potential impact and significance
+      5. Adherence to the required format and structure
+      6. Completeness of all required sections
+      7. Clarity and quality of writing
+      8. Limitations and potential challenges
+
+      Ensure the proposal follows the required structure:
+      - Title
+      - Abstract (150-250 words)
+      - Background & Literature Review
+      - Problem Statement & Research Gap
+      - Proposed Gen AI Approach
+      - Expected Impact in Healthcare
+      - Limitations or Ethical Considerations
+      - References
+
+      Check if the proposal fits within the 2-3 page guideline and whether sections are appropriately
+      balanced. Verify that the abstract is within the 150-250 word count.
+
+      Provide specific, constructive feedback for improving both the content and format of the proposal.
+    agent: critic
+    expected_output: A detailed critique with specific improvement suggestions regarding both content and format
+    context_required: true
+
+  - id: proposal_refinement
+    description: >
+      Refine the research proposal based on the critique and feedback received.
+      Address all the points raised in the critique and strengthen the proposal accordingly.
+
+      The final proposal must maintain the required structure:
+      1. Title
+      2. Abstract (150-250 words)
+      3. Background & Literature Review
+      4. Problem Statement & Research Gap
+      5. Proposed Gen AI Approach
+      6. Expected Impact in Healthcare
+      7. Limitations or Ethical Considerations
+      8. References
+
+      Additionally, include a short section (max 1/2 page) titled "Multi-Agent Reflection"
+      at the end of the proposal reflecting on how the different agents (researcher,
+      domain expert, critic, and writer) helped shape the thinking and proposal.
+      This reflection should discuss how the collaborative, multi-agent approach
+      contributed to the quality and development of the research proposal.
+
+      Produce a final, polished research proposal in Markdown format that is ready for submission.
+    agent: proposal_writer
+    expected_output: A refined, final research proposal with the required structure and reflection section
+    context_required: true

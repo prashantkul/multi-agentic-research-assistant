@@ -1,0 +1,1 @@
+"""Multi-agent application using Crew AI for healthcare generative AI research proposals."""

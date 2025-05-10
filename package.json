@@ -1,0 +1,18 @@
+{
+  "name": "multi-agent-app",
+  "version": "1.0.0",
+  "description": "Multi-agent application using Crew AI for healthcare generative AI research proposals",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.2.0",
+    "crewai": "^2.0.0",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
