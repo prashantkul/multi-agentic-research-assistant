@@ -33,7 +33,7 @@ ENV/
 .uv/
 
 # Data and outputs
-outputs/*
+
 # Keep .gitkeep files to maintain directory structure
 !data/papers/.gitkeep
 !data/chroma_db/.gitkeep
