@@ -69,6 +69,11 @@ python run.py --papers-dir /path/to/papers/directory --papers https://arxiv.org/
 ```
 Uses all papers in the directory plus the additional specified papers.
 
+```
+python run.py --skip-ingestion
+```
+Skips the paper ingestion process and uses the existing Chroma DB. This is useful after you've already ingested papers and don't want to repeat the process.
+
 ### Workflow
 
 The workflow will:
@@ -87,18 +92,43 @@ The final research proposal and intermediate outputs will be saved in the `outpu
 
 1. Ensure you have Python 3.8+ installed
 2. Clone the repository and navigate to it
-3. Install dependencies:
+3. Install dependencies using uv (faster, more reliable package manager):
+   ```
+   # Install uv if you don't have it
+   curl -LsSf https://astral.sh/uv/install.sh | sh
+
+   # Create virtual environment and install dependencies
+   uv venv
+   uv pip install -r requirements.txt
+
+   # Activate the virtual environment
+   source .venv/bin/activate  # On Unix/MacOS
+   # OR
+   # .venv\Scripts\activate  # On Windows
+   ```
+
+   Alternatively, you can use pip:
    ```
    pip install -r requirements.txt
    ```
-4. Create a Google API key for Gemini from the Google AI Studio (https://makersuite.google.com)
-5. Update the `.env` file with your API key:
+4. Set up Google Cloud and Vertex AI:
+   - Create or use an existing Google Cloud project
+   - Make sure Vertex AI API is enabled for your project
+   - Set up authentication by creating a service account key or using gcloud auth
+5. Update the `.env` file with your Google Cloud details:
    ```
-   GOOGLE_API_KEY=your-google-api-key
+   GOOGLE_PROJECT_ID=your-google-project-id
+   GOOGLE_REGION=us-central1
    MODEL_NAME=gemini-2.5-pro-preview-05-06
+   EMBEDDING_MODEL=text-embedding-004
    TEMPERATURE=0.7
    MAX_TOKENS=2048
    ```
+6. Authenticate with Google Cloud:
+   ```
+   gcloud auth application-default login
+   ```
+   or set `GOOGLE_APPLICATION_CREDENTIALS` environment variable pointing to a service account key file.
 
 ### Step 2: Prepare Research Papers
 

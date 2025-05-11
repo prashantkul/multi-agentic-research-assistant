@@ -1,26 +1,56 @@
-"""RAG chain utility for the domain expert agent."""
+"""RAG chain utility for the domain expert agent using Vertex AI."""
 import os
 from typing import List, Dict, Any, Optional
 from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.runnables import Runnable
+from langchain.prompts.chat import ChatPromptTemplate
+from langchain.schema.runnable import Runnable
 
 from src.utils.vector_store import VectorStore
-from src.utils.gemini_llm import GeminiLLM
+from src.utils.gemini_adapter import get_langchain_compatible_llm
 
 class RAGChain:
-    """RAG chain for domain expert agent."""
+    """RAG chain for domain expert agent using Vertex AI."""
     
     def __init__(self, vector_store: Optional[VectorStore] = None):
         """Initialize RAG chain.
-        
+
         Args:
             vector_store: Optional vector store instance
         """
-        self.vector_store = vector_store or VectorStore()
-        self.llm = GeminiLLM.get_llm()
-        self.chain = self._create_rag_chain()
+        print(f"\n[DEBUG] RAGChain: Initializing RAG Chain")
+        try:
+            print(f"[DEBUG] RAGChain: Creating/loading vector store")
+            self.vector_store = vector_store or VectorStore()
+            print(f"[DEBUG] RAGChain: Successfully created/loaded vector store")
+        except Exception as e:
+            print(f"[ERROR] RAGChain: Failed to create/load vector store: {e}")
+            print(f"[ERROR] RAGChain: Error type: {type(e).__name__}")
+            import traceback
+            print(f"[ERROR] RAGChain: {traceback.format_exc()}")
+            raise
+
+        try:
+            print(f"[DEBUG] RAGChain: Getting LangChain-compatible LLM")
+            self.llm = get_langchain_compatible_llm()
+            print(f"[DEBUG] RAGChain: Successfully got LLM instance")
+        except Exception as e:
+            print(f"[ERROR] RAGChain: Failed to get LLM instance: {e}")
+            print(f"[ERROR] RAGChain: Error type: {type(e).__name__}")
+            import traceback
+            print(f"[ERROR] RAGChain: {traceback.format_exc()}")
+            raise
+
+        try:
+            print(f"[DEBUG] RAGChain: Creating retrieval chain")
+            self.chain = self._create_rag_chain()
+            print(f"[DEBUG] RAGChain: Successfully created retrieval chain")
+        except Exception as e:
+            print(f"[ERROR] RAGChain: Failed to create retrieval chain: {e}")
+            print(f"[ERROR] RAGChain: Error type: {type(e).__name__}")
+            import traceback
+            print(f"[ERROR] RAGChain: {traceback.format_exc()}")
+            raise
     
     def _create_rag_chain(self) -> Runnable:
         """Create RAG chain.
@@ -55,37 +85,64 @@ class RAGChain:
     
     def query(self, query: str) -> Dict[str, Any]:
         """Query the RAG chain.
-        
+
         Args:
             query: Query string
-            
+
         Returns:
             Response from the RAG chain
         """
-        return self.chain.invoke({"input": query})
+        try:
+            response = self.chain.invoke({"input": query})
+            return response
+        except Exception as e:
+            print(f"Error querying RAG chain: {e}")
+            import traceback
+            print(traceback.format_exc())
+            # Return a fallback response
+            return {
+                "answer": f"I was unable to find specific information on that topic in the academic literature. The RAG system encountered an error: {str(e)}. Please try a different query or reformulate your question.",
+                "input": query
+            }
     
     def get_citations(self, query: str, max_results: int = 3) -> List[Dict[str, Any]]:
         """Get citations for a query.
-        
+
         Args:
             query: Query string
             max_results: Maximum number of citations to return
-            
+
         Returns:
             List of citations
         """
-        results = self.vector_store.similarity_search(query, k=max_results)
-        
-        citations = []
-        for result in results:
-            metadata = result["metadata"]
-            citation = {
-                "excerpt": result["content"][:150] + "...",
-                "source": metadata.get("source", "Unknown"),
-                "page": metadata.get("page", "Unknown"),
-                "title": metadata.get("title", os.path.basename(metadata.get("source", "Unknown paper"))),
-                "authors": metadata.get("authors", "Unknown")
-            }
-            citations.append(citation)
-        
-        return citations
+        try:
+            results = self.vector_store.similarity_search(query, k=max_results)
+
+            citations = []
+            if not results:
+                print(f"No results found for query: {query}")
+                return citations
+
+            for result in results:
+                if not result or "metadata" not in result:
+                    continue
+
+                metadata = result["metadata"]
+                content = result.get("content", "")
+                excerpt = content[:150] + "..." if content else "No content available"
+
+                citation = {
+                    "excerpt": excerpt,
+                    "source": metadata.get("source", "Unknown"),
+                    "page": metadata.get("page", "Unknown"),
+                    "title": metadata.get("title", os.path.basename(metadata.get("source", "Unknown paper"))),
+                    "authors": metadata.get("authors", "Unknown")
+                }
+                citations.append(citation)
+
+            return citations
+        except Exception as e:
+            print(f"Error getting citations: {e}")
+            import traceback
+            print(traceback.format_exc())
+            return [{"excerpt": "Error retrieving citations", "source": "Error", "title": f"Error: {str(e)}"}]

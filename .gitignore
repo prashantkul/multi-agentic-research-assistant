@@ -29,6 +29,8 @@ wheels/
 venv/
 env/
 ENV/
+.venv/
+.uv/
 
 # Data and outputs
 outputs/*
