@@ -23,3 +23,7 @@ langchain-text-splitters==0.2.4
 pydantic>=2.5.0
 pyyaml>=6.0.0
 requests>=2.31.0
+
+# UI dependencies
+streamlit>=1.30.0
+pandas>=2.1.0

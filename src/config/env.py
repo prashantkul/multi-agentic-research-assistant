@@ -16,7 +16,7 @@ class Config:
     raw_embedding_model = os.getenv("EMBEDDING_MODEL", "text-embedding-004")
     EMBEDDING_MODEL = raw_embedding_model.replace("models/", "") if raw_embedding_model.startswith("models/") else raw_embedding_model
     TEMPERATURE = float(os.getenv("TEMPERATURE", "0.7"))
-    MAX_TOKENS = int(os.getenv("MAX_TOKENS", "2048"))
+    MAX_TOKENS = int(os.getenv("MAX_TOKENS", "8192"))
 
     @classmethod
     def validate(cls):

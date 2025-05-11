@@ -122,7 +122,7 @@ The final research proposal and intermediate outputs will be saved in the `outpu
    MODEL_NAME=gemini-2.5-pro-preview-05-06
    EMBEDDING_MODEL=text-embedding-004
    TEMPERATURE=0.7
-   MAX_TOKENS=2048
+   MAX_TOKENS=8192
    ```
 6. Authenticate with Google Cloud:
    ```
